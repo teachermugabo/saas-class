@@ -1,12 +1,10 @@
 def combine_anagrams(words)
-	result = Hash.new
-	words.each {|word| 
-		(result.keys.any? {|key| key.anagram? word}) ? 
-			result[word.sort.downcase] << word : 
-			result[word.sort.downcase] = [word]} 
-	result.values
+	result = Hash.new(Array.new)
+	return words unless words.respond_to?("each")
+  words.each {|word| result[word.downcase.sort] += [word]}
+  result.values
 end
-	
+
 # duck-tape sort onto String
 class String
 	def sort
@@ -14,6 +12,11 @@ class String
 	end
 
 	def anagram?(str)
-		self.sort.casecmp(str.sort).zero?
+		self.downcase.sort == str.downcase.sort
 	end
+end
+
+if __FILE__ == $0
+  puts "Testing..."
+  puts combine_anagrams(['cars','for','potatoes','raCs','four','ScaR','crEAms','scReam'])
 end
